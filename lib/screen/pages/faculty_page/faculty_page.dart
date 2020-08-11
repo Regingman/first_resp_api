@@ -15,6 +15,8 @@ class FacultyPage extends StatefulWidget {
 }
 
 class _FacultyPageState extends State<FacultyPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController name = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocListener<FacultyBloc, FacultyState>(
@@ -40,6 +42,7 @@ class _FacultyPageState extends State<FacultyPage> {
 
   Widget _buildLoaded(FacultyLoaded state) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Faculties"),
       ),
@@ -50,6 +53,12 @@ class _FacultyPageState extends State<FacultyPage> {
           return _buildListItem(itemTask);
         },
       ),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          onPressed: () {
+            createAlertDialog(true, null);
+          },
+          child: Icon(Icons.add)),
     );
   }
 
@@ -58,10 +67,25 @@ class _FacultyPageState extends State<FacultyPage> {
       actionPane: SlidableDrawerActionPane(),
       secondaryActions: <Widget>[
         IconSlideAction(
+            caption: 'Edit',
+            color: Colors.green,
+            icon: Icons.edit,
+            onTap: () {
+              name.text = state.name;
+              createAlertDialog(false, state);
+            }),
+        IconSlideAction(
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
-          onTap: () => {},
+          onTap: () {
+            SnackBar mySnackbar = SnackBar(
+              content: Text("${state.name} delete"),
+            );
+            _scaffoldKey.currentState.showSnackBar(mySnackbar);
+            //Scaffold.of(context).showSnackBar(mySnackbar);
+            context.bloc<FacultyBloc>().add(DeleteFacultyEvent(state));
+          },
         )
       ],
       child: Container(
@@ -76,5 +100,44 @@ class _FacultyPageState extends State<FacultyPage> {
         ),
       ),
     );
+  }
+
+  createAlertDialog(bool create, Faculty department) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Faculty name"),
+            content: TextField(
+              controller: name,
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                elevation: 5.0,
+                child: Text("submit"),
+                onPressed: () {
+                  Navigator.of(context).pop(name.text.toString());
+                  if (create) {
+                    Faculty tempFaculty =
+                        new Faculty(name: this.name.text.toString());
+                    context
+                        .bloc<FacultyBloc>()
+                        .add(CreateFacultyEvent(tempFaculty));
+                  } else {
+                    department.name = this.name.text.toString();
+                    context
+                        .bloc<FacultyBloc>()
+                        .add(UpdateFacultyEvent(department));
+
+                    SnackBar mySnackbar = SnackBar(
+                      content: Text("${department.name} update"),
+                    );
+                    _scaffoldKey.currentState.showSnackBar(mySnackbar);
+                  }
+                },
+              )
+            ],
+          );
+        });
   }
 }

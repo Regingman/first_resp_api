@@ -12,12 +12,12 @@ import 'package:first_resp_api/data/providers/list_lessons_provider.dart';
 import 'package:first_resp_api/data/providers/teacher_provider.dart';
 
 class Repository {
-  DepartmentProvider _departmentProvider = new DepartmentProvider();
-  FacultyProvider _facultyProvider = new FacultyProvider();
-  GroupProvider _groupProvider = new GroupProvider();
-  LessonProvider _lessonProvider = new LessonProvider();
-  ListLessonProvider _listLessonProvider = new ListLessonProvider();
-  TeacherProvider _teacherProvider = new TeacherProvider();
+  DepartmentProvider departmentProvider = new DepartmentProvider();
+  FacultyProvider facultyProvider = new FacultyProvider();
+  GroupProvider groupProvider = new GroupProvider();
+  LessonProvider lessonProvider = new LessonProvider();
+  ListLessonProvider listLessonProvider = new ListLessonProvider();
+  TeacherProvider teacherProvider = new TeacherProvider();
 
   List<Department> departments = [];
   List<Faculty> faculies = [];
@@ -27,12 +27,12 @@ class Repository {
   List<Teacher> teachers = [];
 
   Future<bool> initAll() async {
-    this.faculies = await _facultyProvider.getAll();
-    this.departments = await _departmentProvider.getAll();
-    this.groups = await _groupProvider.getAll();
-    this.lessons = await _lessonProvider.getAll();
-    this.listLessons = await _listLessonProvider.getAll();
-    this.teachers = await _teacherProvider.getAll();
+    this.faculies = await facultyProvider.getAll();
+    this.departments = await departmentProvider.getAll();
+    this.groups = await groupProvider.getAll();
+    this.lessons = await lessonProvider.getAll();
+    this.listLessons = await listLessonProvider.getAll();
+    this.teachers = await teacherProvider.getAll();
 
     return true;
   }

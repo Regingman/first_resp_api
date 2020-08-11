@@ -4,7 +4,7 @@ class Department {
   // ignore: non_constant_identifier_names
   int id_faculty;
 
-  Department({this.id, this.name});
+  Department({this.id, this.name, this.id_faculty});
 
   Department.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -14,6 +14,7 @@ class Department {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = this.id;
     data['name'] = this.name;
     data['id_faculty'] = this.id_faculty;
     return data;

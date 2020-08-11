@@ -1,6 +1,6 @@
 class ApiService {
   static String _base =
-      "https://7d7bd0a23314.ngrok.io"; //"https://10.240.95.169:44390/";
+      "https://67263b083d8b.ngrok.io"; //"https://10.240.95.169:44390/";
   //api
   static String groups = "$_base/api/groups";
 
